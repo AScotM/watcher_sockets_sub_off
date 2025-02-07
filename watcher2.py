@@ -5,10 +5,13 @@ from datetime import datetime
 COLORS = {
     "ESTABLISHED": "\033[32m",  # Green
     "SYN_SENT": "\033[31m",      # Red
-    "SYN_RECV": "\033[31m",
+    "SYN_RECV": "\033[31m",      # Red
     "LISTEN": "\033[33m",        # Yellow
-    "CLOSE": "\033[31m",
+    "CLOSE": "\033[31m",         # Red
     "DEFAULT": "\033[0m",        # Reset
+    "HEADER": "\033[1;34m",       # Bold Blue for header
+    "TIMESTAMP": "\033[1;36m",    # Bold Cyan for timestamp
+    "SEPARATOR": "\033[1;30m",    # Light Grey for separator
 }
 
 TCP_STATES = {
@@ -35,8 +38,8 @@ def read_tcp_connections():
         with open('/proc/net/tcp', 'r') as file:
             lines = file.readlines()
 
-        print(f"\033[32mTimestamp: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\033[0m")
-        print(f"\033[33mNetid  State          Local Address:Port     Peer Address:Port\033[0m")
+        print(f"{COLORS['TIMESTAMP']}Timestamp: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\033[0m")
+        print(f"{COLORS['HEADER']}Netid  State          Local Address:Port     Peer Address:Port\033[0m")
         print("=" * 70)
 
         for line in lines[1:]:  # Skip header
@@ -53,6 +56,9 @@ def read_tcp_connections():
             peer_ip = parse_ip(peer_address)
 
             print(f"tcp    {color}{state_name:<14}\033[0m {local_ip}:{int(local_port, 16):>5}   {peer_ip}:{int(peer_port, 16):>5}")
+
+            # Adding a subtle separator between entries for readability
+            print(f"{COLORS['SEPARATOR']}--------------------------------------------\033[0m")
 
         print("=" * 70)
 
@@ -72,4 +78,3 @@ def watch_tcp_connections(interval):
 
 if __name__ == "__main__":
     watch_tcp_connections(2)
-
