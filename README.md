@@ -1,6 +1,8 @@
 # watcher_sockets_sub_off
-simple sockets watcher with interval 2 sec that reads /proc/net/tcp
 
+
+POC in progress that reads /proc/net/tcp
+would not suggest to run this in any prod at least so far
 
 if you found it useful for any purpose, toss a litecoin
 
