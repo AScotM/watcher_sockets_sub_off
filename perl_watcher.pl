@@ -124,5 +124,15 @@ GetOptions(
     "output-format=s" => \$output_format,
 );
 
-watch_tcp_connections($interval, $filter_state, $filter_ip, $filter_port, $output_format);
+# Validate command-line arguments
+if ($interval <= 0) {
+    die "\033[31mError: Interval should be a positive integer.\033[0m\n";
+}
+if ($filter_state && !exists $TCP_STATES{lc $filter_state}) {
+    die "\033[31mError: Invalid filter state '$filter_state'.\033[0m\n";
+}
+if ($output_format !~ /^(text|json)$/) {
+    die "\033[31mError: Output format should be either 'text' or 'json'.\033[0m\n";
+}
 
+watch_tcp_connections($interval, $filter_state, $filter_ip, $filter_port, $output_format);
